@@ -7,31 +7,38 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SimpleRegistryTest {
+  private static SimpleFileRegistry simpleFileRegistry;
+  
+  @BeforeClass
+  public static void setupFactory() throws Exception {
+    RegistryFactory factory = RegistryFactory.getInstance();
+    simpleFileRegistry = new SimpleFileRegistry();
+    simpleFileRegistry.setFilePath("bin/mdregtest.xml");
+    simpleFileRegistry.init();
+    simpleFileRegistry.clear();
+    factory.setMetadataRegistry(simpleFileRegistry);
+  }
+  
+  @Test
+  public void testFactorySetup() {
+    RegistryFactory factory = RegistryFactory.getInstance();
+    Assert.assertNotNull("Factory is null", factory);
+    SimpleFileRegistry metadataRegistry = (SimpleFileRegistry) factory.getMetadataRegistry();
+    Assert.assertEquals("File path is wrong", "bin/mdregtest.xml", metadataRegistry.getFilePath());
+    Assert.assertTrue("Init failed", metadataRegistry.isInitialized());
+    Assert.assertEquals("Registry is wrong", simpleFileRegistry, metadataRegistry);
+  }
 
 	@Test
 	public void testFactory () throws Exception {
 		
 		RegistryFactory factory = RegistryFactory.getInstance();
-		Assert.assertNotNull( "Factory is null", factory );
 		
-		SimpleFileRegistry metadataRegistry = new SimpleFileRegistry();
-		metadataRegistry.setFilePath("bin/mdregtest.xml");
-		Assert.assertEquals("File path is wrong", "bin/mdregtest.xml", metadataRegistry.getFilePath());
-
-		metadataRegistry.init();
-		
-		Assert.assertTrue("Init failed", metadataRegistry.isInitialized());
-		
-		metadataRegistry.clear();
-		
-		factory.setMetadataRegistry(metadataRegistry);
-		
-		IMetadataRegistry metadataRegistry2 = factory.getMetadataRegistry();
-
-		Assert.assertEquals("Registry is wrong", metadataRegistry, metadataRegistry2);
+		SimpleFileRegistry metadataRegistry = (SimpleFileRegistry) factory.getMetadataRegistry();
 		
 		Entity ktr1 = new Entity("ktr1", "My Trans", Type.TYPE_TRANSFORMATION.getId());
 		String attrValue1 = "attribute value 1";
