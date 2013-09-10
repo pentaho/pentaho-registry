@@ -15,6 +15,7 @@
     
     <!--  external dependencies -->
     <dependency org="commons-lang" name="commons-lang" rev="2.6" />
+    <dependency org="org.owasp.esapi" name="esapi" rev="2.0.1" transitive="false"/>
 
     <!-- test dependencies -->
     <dependency org="junit" name="junit" rev="4.4" conf="test->default" />

@@ -27,6 +27,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.Encoder;
 
 /**
  * A subclass of the simple registry that persists the registry in an XML document on the file system
@@ -122,7 +124,8 @@ public class OrderedFileRegistry extends SimpleFileRegistry {
 	}
 	
 	protected void addToBuffer( String id, String value, StringBuffer buffer ) {
-		buffer.append("<entry key=\"").append(id).append("\">").append(value).append("</entry>\n");
+	  Encoder encoder = ESAPI.encoder();
+    buffer.append("<entry key=\"").append(encoder.encodeForXMLAttribute(id)).append("\">").append(encoder.encodeForXML(value)).append("</entry>\n");
 	}
 	
 }
