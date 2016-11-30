@@ -12,13 +12,14 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2016 Pentaho Corporation..  All rights reserved.
  */
 
 package org.pentaho.metadata.registry;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 
 public class OrderedRegistryTest {
 
@@ -94,4 +95,13 @@ public class OrderedRegistryTest {
 
   }
 
+  @Test
+  public void testAddToBuffer() throws Exception {
+    String badStringToEscapeWithSurrogateCh = "[\"\'<>& \uD842\uDFB7]";
+    String expectedAfterEncoding = "<entry key=\"[&#34;&#39;&lt;>&amp; \uD842\uDFB7]\">[&#34;&#39;&lt;&gt;&amp; \uD842\uDFB7]</entry>\n";
+    OrderedFileRegistry metadataRegistry = new OrderedFileRegistry();
+    StringBuffer stringBuffer = new StringBuffer();
+    metadataRegistry.addToBuffer( badStringToEscapeWithSurrogateCh, badStringToEscapeWithSurrogateCh, stringBuffer );
+    Assert.assertEquals( expectedAfterEncoding, stringBuffer.toString() );
+  }
 }

@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2016 Pentaho Corporation..  All rights reserved.
  */
 
 package org.pentaho.metadata.registry;
@@ -28,8 +28,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.owasp.esapi.ESAPI;
-import org.owasp.esapi.Encoder;
+import org.owasp.encoder.Encode;
 
 /**
  * A subclass of the simple registry that persists the registry in an XML document on the file system
@@ -126,9 +125,8 @@ public class OrderedFileRegistry extends SimpleFileRegistry {
   }
 
   protected void addToBuffer( String id, String value, StringBuffer buffer ) {
-    Encoder encoder = ESAPI.encoder();
-    buffer.append( "<entry key=\"" ).append( encoder.encodeForXMLAttribute( id ) ).append( "\">" ).append(
-        encoder.encodeForXML( value ) ).append( "</entry>\n" );
+    buffer.append( "<entry key=\"" ).append( Encode.forXmlAttribute( id ) ).append( "\">" ).append(
+        Encode.forXml( value ) ).append( "</entry>\n" );
   }
 
 }
