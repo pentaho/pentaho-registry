@@ -25,16 +25,21 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class SimpleRegistryTest {
   private static SimpleFileRegistry simpleFileRegistry;
+
+  @ClassRule
+  public static TemporaryFolder tmpFolder = new TemporaryFolder();
 
   @BeforeClass
   public static void setupFactory() throws Exception {
     RegistryFactory factory = RegistryFactory.getInstance();
     simpleFileRegistry = new SimpleFileRegistry();
-    simpleFileRegistry.setFilePath( "bin/mdregtest.xml" );
+    simpleFileRegistry.setFilePath( tmpFolder.getRoot().getAbsolutePath() + "mdregtest.xml" );
     simpleFileRegistry.init();
     simpleFileRegistry.clear();
     factory.setMetadataRegistry( simpleFileRegistry );
@@ -45,7 +50,7 @@ public class SimpleRegistryTest {
     RegistryFactory factory = RegistryFactory.getInstance();
     Assert.assertNotNull( "Factory is null", factory );
     SimpleFileRegistry metadataRegistry = (SimpleFileRegistry) factory.getMetadataRegistry();
-    Assert.assertEquals( "File path is wrong", "bin/mdregtest.xml", metadataRegistry.getFilePath() );
+    Assert.assertEquals( "File path is wrong", tmpFolder.getRoot().getAbsolutePath() + "mdregtest.xml", metadataRegistry.getFilePath() );
     Assert.assertTrue( "Init failed", metadataRegistry.isInitialized() );
     Assert.assertEquals( "Registry is wrong", simpleFileRegistry, metadataRegistry );
   }
