@@ -17,17 +17,22 @@
 
 package org.pentaho.metadata.registry;
 
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 
 
 public class OrderedRegistryTest {
+  @Rule
+  public TemporaryFolder tmpFolder = new TemporaryFolder();
 
   @Test
   public void testSaveLoad() throws Exception {
 
     OrderedFileRegistry metadataRegistry = new OrderedFileRegistry();
-    metadataRegistry.setFilePath( "bin/mdregtest2.xml" );
+    metadataRegistry.setFilePath( tmpFolder.getRoot().getAbsolutePath() + "mdregtest2.xml" );
     metadataRegistry.init();
 
     metadataRegistry.clear();
